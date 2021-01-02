@@ -1,28 +1,30 @@
 import { Request, Response } from 'express';
 
-const md5 = require('md5');
-const { generateToken } = require('@utils/token.utils');
-const mongoose = require('mongoose');
-
 const UserService = require('@services/UserService');
 
-const User = mongoose.model('User');
-
 class UserController {
-  singup = (req: Request, res: Response) => {
+  singup = async (req: Request, res: Response) => {
     try {
-      const response = UserService.singup(req.body);
-      return res.status(200).json(response);
+      const data = await UserService.singup(req.body);
+      if (data.status === 'created') {
+        return res.status(200).json(data);
+      }
+      return res.status(409).json({ message: 'Não foi possível fazer o cadastro do novo usuario', ...data });
     } catch (err) {
+      res.status(500).json({ message: 'Não foi possível fazer o cadastro do novo usuario', data: err });
       return err;
     }
   };
 
   singin = async (req: Request, res: Response) => {
     try {
-      const response = UserService.singin(req.body);
-      return res.status(200).json(response);
+      const data = await UserService.singin(req.body);
+      if (data.status === 'find') {
+        return res.status(200).json(data);
+      }
+      return res.status(404).json({ message: 'Não foi possível encontrar o usuario', ...data });
     } catch (err) {
+      res.status(500).json({ message: 'Não foi possível encontrar o usuario', data: err });
       return err;
     }
   }

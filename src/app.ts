@@ -1,5 +1,7 @@
 /* eslint-disable class-methods-use-this */
-import express, { Response, Request, Errback } from 'express';
+import express, {
+  Response, Request, Errback, NextFunction,
+} from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import fs from 'fs';
@@ -25,10 +27,10 @@ interface IAppController {
 class AppController implements IAppController {
   constructor() {
     this.middlewares();
-    this.routes();
-    this.errorManagement();
     this.dbConnect();
     this.loadModels();
+    this.routes();
+    this.errorManagement();
   }
 
   express = express();
@@ -48,31 +50,31 @@ class AppController implements IAppController {
   }
 
   routes() {
-    this.express.get('/api/v1', indexRoutes);
+    this.express.use('/api/v1', indexRoutes);
   }
 
   errorManagement() {
-    this.express.use((err: Errback, req: Request, res: Response) => {
+    // eslint-disable-next-line no-unused-vars, consistent-return
+    this.express.use((err, req: Request, res: Response, next: NextFunction) => {
       if (err instanceof SyntaxError) {
         return res.status(400).send(JSON.stringify({
           error: 'Invalid JSON',
         }));
       }
-      console.error(err);
-      res.status(500).send();
+      res.status(500).json({ message: 'Um erro desconhecido ocorreu', data: err });
     });
   }
 
   dbConnect() {
-    console.log('DB Connected');
     mongoose.connect(config.connectionString, { useNewUrlParser: true });
   }
 
   loadModels() {
-    const modelsPath = path.resolve(__dirname, 'models');
+    const modelsPath = path.resolve(__dirname, 'api', 'models');
     fs.readdirSync(modelsPath).forEach((file) => {
+      const filePath = path.resolve(modelsPath, file);
       // eslint-disable-next-line import/no-dynamic-require, global-require
-      require(`${modelsPath}/${file}`);
+      require(filePath);
     });
   }
 }

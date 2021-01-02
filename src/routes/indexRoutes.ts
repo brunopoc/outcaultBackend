@@ -4,6 +4,6 @@ const userRoutes = require('./userRoutes');
 
 const routes = express.Router();
 
-routes.post('/show', userRoutes);
+routes.use('/user', userRoutes);
 
 module.exports = routes;

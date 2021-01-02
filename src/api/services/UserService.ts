@@ -1,10 +1,7 @@
-import { Request, Response } from 'express';
+import mongoose from 'mongoose';
+import md5 from 'md5';
 
-const md5 = require('md5');
-const { generateToken } = require('@utils/token.utils');
-const mongoose = require('mongoose');
-
-const User = mongoose.model('User');
+const { createToken } = require('@utils/token.utils');
 
 type UserData = {
   email: string;
@@ -14,26 +11,28 @@ type UserData = {
 }
 interface IUserService {
   singup: (data: UserData) => void;
-  singin: (req: Request, res: Response) => void;
+  singin: (data: UserData) => void;
 }
 
 class UserService implements IUserService {
-    singup = (data) => {
-      const {
-        email, name, password, nickname,
-      } = data;
-      const user = new User({
+    singup = async ({
+      email, name, password, nickname,
+    }) => {
+      const UserModel = mongoose.model('User');
+
+      const user = new UserModel({
         name,
         email,
         nickname,
         password: md5(password + global.SALT_KEY),
       });
-      user
+
+      const userResponde = await user
         .save()
         .then(async ({
           _id: id, likedPosts, type,
         }) => {
-          const userToken = await generateToken({
+          const userToken = await createToken({
             email,
             nickname,
             id,
@@ -42,6 +41,7 @@ class UserService implements IUserService {
 
           return {
             token: userToken,
+            status: 'created',
             data: {
               email,
               name,
@@ -52,24 +52,23 @@ class UserService implements IUserService {
             },
           };
         })
-        .catch((e: any) => {
-          throw e;
-        });
+        .catch((e: any) => ({ status: 'notcreated', data: e }));
+      return userResponde;
     }
 
-  singin = (data) => {
-    User.findOne({
-      email: data.email,
-      password: md5(data.password + global.SALT_KEY),
+  singin = async ({ email, password }) => {
+    const userResponse = await mongoose.model('User').findOne({
+      email,
+      password: md5(password + global.SALT_KEY),
       blocked: false,
     })
       .then(async ({
-        _id: id, name, email, type, likedPosts, avatar,
+        _id: id, name, type,
       }) => {
         if (!id) {
-          throw new Error('username or password invalid');
+          return { status: 'notfind', data: Error('username or password invalid') };
         }
-        const token = await generateToken({
+        const token = await createToken({
           email,
           name,
           id,
@@ -77,19 +76,16 @@ class UserService implements IUserService {
         });
         return {
           token,
+          status: 'find',
           data: {
             email,
             name,
             id,
-            likedPosts,
-            avatar,
-            type,
           },
         };
       })
-      .catch((e: any) => {
-        throw e;
-      });
+      .catch((e: any) => ({ status: 'notfind', data: e }));
+    return userResponse;
   }
 }
 
