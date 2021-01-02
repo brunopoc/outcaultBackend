@@ -21,6 +21,7 @@ module.exports = {
         '@utils': './src/utils',
         '@jobs': './src/jobs',
         '@helpers': './src/helpers',
+        '@types': './src/@types',
       },
     }],
   ],

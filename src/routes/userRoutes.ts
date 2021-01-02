@@ -1,8 +1,10 @@
 import express from 'express';
-import UserController from '@controllers/UserController';
+
+const UserController = require('@controllers/UserController');
 
 const routes = express.Router();
 
-routes.get('/show', UserController.show);
+routes.post('/singin', UserController.singin);
+routes.post('/singup', UserController.singup);
 
 module.exports = routes;

@@ -1,11 +1,31 @@
 import { Request, Response } from 'express';
-import User from '@models/User';
 
-export default class UserController {
-  static show(req: Request, res: Response): any {
-    const user: User = new User();
-    user.name = 'João';
-    user.email = 'joaozinho.testador@gmail.com';
-    return res.json({ user });
+const md5 = require('md5');
+const { generateToken } = require('@utils/token.utils');
+const mongoose = require('mongoose');
+
+const UserService = require('@services/UserService');
+
+const User = mongoose.model('User');
+
+class UserController {
+  singup = (req: Request, res: Response) => {
+    try {
+      const response = UserService.singup(req.body);
+      return res.status(200).json(response);
+    } catch (err) {
+      return err;
+    }
+  };
+
+  singin = async (req: Request, res: Response) => {
+    try {
+      const response = UserService.singin(req.body);
+      return res.status(200).json(response);
+    } catch (err) {
+      return err;
+    }
   }
 }
+
+module.exports = new UserController();

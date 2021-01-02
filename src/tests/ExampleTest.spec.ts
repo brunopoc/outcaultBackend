@@ -1,4 +1,4 @@
-import User from '@models/User';
+import User from '@models/UserModel';
 
 test('it should be ok', () => {
   const user = new User();

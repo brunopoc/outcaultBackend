@@ -8,8 +8,8 @@
     "rootDir": "./src",                       
     "removeComments": true,                
     "typeRoots": [
-      "./node_modules/@types",
-      "./src/@types"
+      "./node_modules/@types/**/*",
+      "./src/@types/*"
       ],                       
     "esModuleInterop": true,                  
     "resolveJsonModule": false,
@@ -26,7 +26,8 @@
       "@subscribers/*": ["./src/api/subscribers/*"],
       "@utils/*": ["./src/utils/*"],
       "@jobs/*": ["./src/jobs/*"],
-      "@helpers/*": ["./src/helpers/*"]
+      "@helpers/*": ["./src/helpers/*"],
+      "@types/*": ["./src/@types/*"]
     }  
   },
   "include": [
