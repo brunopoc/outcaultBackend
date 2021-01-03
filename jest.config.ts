@@ -7,4 +7,5 @@ export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>' }),
+  setupFiles: ['dotenv/config'],
 };

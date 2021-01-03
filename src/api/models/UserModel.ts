@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-const schema = new Schema({
+const UserSchema = {
   name: {
     type: String,
     required: true,
@@ -54,15 +54,18 @@ const schema = new Schema({
     type: Boolean,
     default: false,
   },
-  likedPosts: [{
-    type: String,
-  }],
   avatar: {
     type: String,
     trim: true,
   },
-});
+};
+
+const schema = new Schema(UserSchema);
+
+export interface IUserDoc extends mongoose.Document {
+  UserSchema
+}
 
 schema.set('toJSON', { getters: true, virtuals: true });
 
-module.exports = mongoose.model('User', schema);
+module.exports = mongoose.model<IUserDoc>('User', schema);

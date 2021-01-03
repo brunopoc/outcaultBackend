@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import express, {
-  Response, Request, Errback, NextFunction,
+  Response, Request, NextFunction,
 } from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';

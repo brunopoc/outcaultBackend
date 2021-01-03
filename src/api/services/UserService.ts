@@ -9,15 +9,11 @@ type UserData = {
   password: string;
   nickname: string;
 }
-interface IUserService {
-  singup: (data: UserData) => void;
-  singin: (data: UserData) => void;
-}
 
-class UserService implements IUserService {
+class UserService {
     singup = async ({
       email, name, password, nickname,
-    }) => {
+    }: UserData) => {
       const UserModel = mongoose.model('User');
 
       const user = new UserModel({
@@ -30,8 +26,8 @@ class UserService implements IUserService {
       const userResponde = await user
         .save()
         .then(async ({
-          _id: id, likedPosts, type,
-        }) => {
+          _id: id, type,
+        }: any) => {
           const userToken = await createToken({
             email,
             nickname,
@@ -47,7 +43,6 @@ class UserService implements IUserService {
               name,
               nickname,
               id,
-              likedPosts,
               type,
             },
           };
@@ -56,7 +51,7 @@ class UserService implements IUserService {
       return userResponde;
     }
 
-  singin = async ({ email, password }) => {
+  singin = async ({ email, password }: UserData) => {
     const userResponse = await mongoose.model('User').findOne({
       email,
       password: md5(password + global.SALT_KEY),
@@ -64,7 +59,7 @@ class UserService implements IUserService {
     })
       .then(async ({
         _id: id, name, type,
-      }) => {
+      }: any) => {
         if (!id) {
           return { status: 'notfind', data: Error('username or password invalid') };
         }
