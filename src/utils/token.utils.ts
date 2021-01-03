@@ -8,6 +8,6 @@ export const decodeToken = async (token) => {
     return data;
   } catch (err) {
     console.log('Token Invalido: ', err);
-    return { err, message: 'Invalid Token' };
+    return { err, message: 'invalid' };
   }
 };

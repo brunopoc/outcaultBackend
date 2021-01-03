@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
 const UserService = require('@services/UserService');
+const message = require('@utils/message.utils');
 
 class UserController {
   singup = async (req: Request, res: Response) => {
@@ -9,9 +10,9 @@ class UserController {
       if (data.status === 'created') {
         return res.status(200).json(data);
       }
-      return res.status(409).json({ message: 'Não foi possível fazer o cadastro do novo usuario', ...data });
+      return res.status(409).json({ message: message.user.notCreated, ...data });
     } catch (err) {
-      res.status(500).json({ message: 'Não foi possível fazer o cadastro do novo usuario', data: err });
+      res.status(500).json({ message: message.user.notCreated, data: err });
       return err;
     }
   };
@@ -22,9 +23,9 @@ class UserController {
       if (data.status === 'find') {
         return res.status(200).json(data);
       }
-      return res.status(404).json({ message: 'Não foi possível encontrar o usuario', ...data });
+      return res.status(404).json({ message: message.user.notLogged, ...data });
     } catch (err) {
-      res.status(500).json({ message: 'Não foi possível encontrar o usuario', data: err });
+      res.status(500).json({ message: message.user.notLogged, data: err });
       return err;
     }
   }
