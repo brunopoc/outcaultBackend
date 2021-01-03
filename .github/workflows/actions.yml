@@ -16,22 +16,31 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
-        mongodb-version: [4.0, 4.2, 4.4]
+        node-version: [12.x]
+        mongodb-version: [4.4]
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Git Checkout
+      uses: actions/checkout@v2
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.3.0
       with:
         mongodb-version: ${{ matrix.mongodb-version }}
+
     - name: Install dependencies
       run: npm install
-    - name: run CI
-      run: npm ci --if-present
+
     - name: Run tests
       run: npm test
+      env:
+        SALT_KEY: 95efe33dfa71a3ce8e0a3fe45ac0e58a2ac474b1
+        DB_CONNECT: 'mongodb://localhost:27017/api'
+        
+    - name: Run CI
+      run: npm ci --if-present

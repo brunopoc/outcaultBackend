@@ -35,7 +35,7 @@ module.exports = {
   setupDB(databaseName) {
     // Connect to Mongoose
     beforeAll(async () => {
-      const url = `mongodb://127.0.0.1/${databaseName}`;
+      const url = `mongodb://localhost:27017/${databaseName}`;
       await mongoose.connect(url, { useNewUrlParser: true });
     });
 
