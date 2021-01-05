@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 import md5 from 'md5';
+import crypto from 'crypto';
 
 const { createToken } = require('@utils/token.utils');
+const mailer = require('@helpers/mailer');
 
 type UserData = {
   email: string;
@@ -15,12 +17,14 @@ class UserService {
       email, name, password, nickname,
     }: UserData) => {
       const UserModel = mongoose.model('User');
+      const emailToken = crypto.randomBytes(20).toString('hex');
 
       const user = new UserModel({
         name,
         email,
         nickname,
         password: md5(password + global.SALT_KEY),
+        emailConfirmToken: emailToken,
       });
 
       const userResponde = await user
@@ -34,6 +38,17 @@ class UserService {
             id,
             type,
           });
+
+          mailer.sendMail(
+            {
+              to: email,
+              from: 'suporte@sougamercomorgulho.com.br',
+              subject: 'Confirme seu Email - Bem Vindo ao Sou Gamer Com Orgulho!',
+              template: 'confirmemail',
+              context: { token: emailToken, name },
+            },
+            (e) => ({ status: 'notcreated', data: e }),
+          );
 
           return {
             token: userToken,
@@ -82,6 +97,89 @@ class UserService {
       .catch((e: any) => ({ status: 'notfind', data: e }));
     return userResponse;
   }
+
+  forgetpassword = async ({ email }) => {
+    const User = mongoose.model('User');
+    User.findOne({
+      email,
+    })
+      .then(async ({ _id: id }) => {
+        if (!id) {
+          return { status: 'notfind' };
+        }
+        const token = crypto.randomBytes(20).toString('hex');
+
+        const now = new Date();
+        now.setHours(now.getHours() + 1);
+
+        await User.findByIdAndUpdate(
+          id,
+          {
+            $set: {
+              passwordResetToken: token,
+              passwordResetExpires: now,
+            },
+          },
+          { new: true },
+        );
+
+        mailer.sendMail(
+          {
+            to: email,
+            from: 'suporte@sougamercomorgulho.com.br',
+            template: 'forgotpassword',
+            subject: 'Resete sua senha - Sou Gamer Com Orgulho!',
+            context: { token },
+          },
+          (err) => ({ status: 'emailNotSend', data: err }),
+        );
+
+        return { status: 'success' };
+      })
+      .catch((e) => ({ status: 'errorOcurred', data: e }));
+  };
+
+  resetpassword = async ({ email, token, password }) => {
+    try {
+      const user: any = await mongoose.model('User').findOne({
+        email,
+      }).select('+passwordResetToken passwordResetExpires');
+
+      if (!user) return { status: 'userNotFound' };
+
+      if (token !== user.passwordResetToken) { return { status: 'invalidToken' }; }
+
+      const now = new Date();
+
+      if (now > user.passwordResetExpires) { return { status: 'expiredToken' }; }
+
+      user.password = md5(password + global.SALT_KEY);
+
+      user.save();
+
+      return { status: 'success' };
+    } catch (err) {
+      return { status: 'cantResetPassword', data: err };
+    }
+  };
+
+  confirmemail = async (token) => {
+    try {
+      const user: any = await mongoose.model('User').findOne({
+        emailConfirmToken: token,
+      }).select('+emailConfirmToken');
+
+      if (!user) return { status: 'invalidToken' };
+
+      user.emailChecked = true;
+
+      user.save();
+
+      return { status: 'success' };
+    } catch (err) {
+      return { status: 'cantResetPassword', data: err };
+    }
+  };
 }
 
 module.exports = new UserService();
