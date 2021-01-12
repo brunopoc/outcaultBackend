@@ -163,7 +163,7 @@ class UserService {
     }
   };
 
-  confirmemail = async (token) => {
+  confirmemail = async ({ token }) => {
     try {
       const user: any = await mongoose.model('User').findOne({
         emailConfirmToken: token,

@@ -1,9 +1,18 @@
 import path from 'path';
 import nodemailer from 'nodemailer';
-import { hbs } from 'nodemailer-express-handlebars';
 
-const uri = process.env.SMTP;
-const mailer = nodemailer.createTransport(uri);
+const hbs = require('nodemailer-express-handlebars');
+const config = require('../config/config');
+
+const setup = {
+  host: config.email.uri,
+  port: config.email.port,
+  auth: {
+    user: config.email.user,
+    pass: config.email.password,
+  },
+};
+const mailer = nodemailer.createTransport(setup);
 const templateDir = path.resolve(__dirname, 'src', 'templates');
 
 const handlebarOptions = {

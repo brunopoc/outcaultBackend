@@ -10,10 +10,9 @@ class UserController {
       if (data.status === 'created') {
         return res.status(200).json(data);
       }
-      return res.status(409).json({ message: message.user.notCreated, ...data });
+      return res.status(400).json({ message: message.user.notCreated, ...data });
     } catch (err) {
-      res.status(500).json({ message: message.user.notCreated, data: err });
-      return err;
+      return res.status(500).json({ message: message.user.notCreated, data: err });
     }
   };
 
@@ -25,10 +24,45 @@ class UserController {
       }
       return res.status(404).json({ message: message.user.notLogged, ...data });
     } catch (err) {
-      res.status(500).json({ message: message.user.notLogged, data: err });
-      return err;
+      return res.status(500).json({ message: message.user.notLogged, data: err });
     }
-  }
+  };
+
+  forgetpassword = async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.forgetpassword(req.body);
+      if (data.status === 'success') {
+        return res.status(200).json(data);
+      }
+      return res.status(400).json({ message: message.user.forgetFailed, ...data });
+    } catch (err) {
+      return res.status(500).json({ message: message.user.forgetFailed, data: err });
+    }
+  };
+
+  resetpassword = async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.resetpassword(req.body);
+      if (data.status === 'success') {
+        return res.status(200).json(data);
+      }
+      return res.status(406).json({ message: message.user.resetFailed, ...data });
+    } catch (err) {
+      return res.status(500).json({ message: message.user.resetFailed, data: err });
+    }
+  };
+
+  confirmemail = async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.confirmemail(req.body);
+      if (data.status === 'success') {
+        return res.status(200).json(data);
+      }
+      return res.status(406).json({ message: message.user.confirmFailed, ...data });
+    } catch (err) {
+      return res.status(500).json({ message: message.user.confirmFailed, data: err });
+    }
+  };
 }
 
 module.exports = new UserController();
