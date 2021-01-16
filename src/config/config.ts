@@ -10,4 +10,8 @@ module.exports = {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  multer: {
+    storageType: process.env.STORAGE_TYPE,
+    bucket: { name: process.env.BUCKET_NAME },
+  },
 };
