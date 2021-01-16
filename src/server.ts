@@ -40,7 +40,6 @@ const server = {
     const bind = typeof addr === 'string'
       ? `pipe ${addr}`
       : `port ${addr.port}`;
-    console.log(`API rodando na porta ${bind}`);
   },
   run: () => {
     const port = server.normalizePort(process.env.PORT || '4000');
@@ -48,6 +47,7 @@ const server = {
     app.listen(port);
     app.on('error', server.onError);
     app.on('listening', server.onListening);
+    console.log(`API rodando na porta ${port}`);
   },
 };
 

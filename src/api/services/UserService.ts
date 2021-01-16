@@ -27,7 +27,7 @@ class UserService {
         emailConfirmToken: emailToken,
       });
 
-      const userResponde = await user
+      const userResponse = await user
         .save()
         .then(async ({
           _id: id, type,
@@ -63,7 +63,7 @@ class UserService {
           };
         })
         .catch((e: any) => ({ status: 'notcreated', data: e }));
-      return userResponde;
+      return userResponse;
     }
 
   singin = async ({ email, password }: UserData) => {

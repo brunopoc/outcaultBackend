@@ -11,6 +11,7 @@ exports.post = async (req: Request, res: Response) => {
     }
     return res.status(400).send({ message: message.image.uploadFailed, ...data });
   } catch (e) {
+    console.log(e);
     return res.status(500).send({ message: message.image.uploadFailed, data: e });
   }
 };
