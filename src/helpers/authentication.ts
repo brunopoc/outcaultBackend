@@ -14,6 +14,8 @@ export const authorize = async (req, res, next) => {
       message: message.unauthorized,
     });
   }
+
+  res.locals.user = data;
   return next();
 };
 
@@ -30,5 +32,7 @@ export const authorizeAdmin = async (req, res, next) => {
       message: message.unauthorized,
     });
   }
+
+  res.locals.user = data;
   return next();
 };

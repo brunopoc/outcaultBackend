@@ -4,7 +4,7 @@ const UserService = require('@services/UserService');
 const message = require('@utils/message.utils');
 
 class UserController {
-  singup = async (req: Request, res: Response) => {
+  singUp = async (req: Request, res: Response) => {
     try {
       const data = await UserService.singup(req.body);
       if (data.status === 'created') {
@@ -16,7 +16,7 @@ class UserController {
     }
   };
 
-  singin = async (req: Request, res: Response) => {
+  singIn = async (req: Request, res: Response) => {
     try {
       const data = await UserService.singin(req.body);
       if (data.status === 'find') {
@@ -28,7 +28,7 @@ class UserController {
     }
   };
 
-  forgetpassword = async (req: Request, res: Response) => {
+  forgetPassword = async (req: Request, res: Response) => {
     try {
       const data = await UserService.forgetpassword(req.body);
       if (data.status === 'success') {
@@ -40,7 +40,7 @@ class UserController {
     }
   };
 
-  resetpassword = async (req: Request, res: Response) => {
+  resetPassword = async (req: Request, res: Response) => {
     try {
       const data = await UserService.resetpassword(req.body);
       if (data.status === 'success') {
@@ -52,7 +52,7 @@ class UserController {
     }
   };
 
-  confirmemail = async (req: Request, res: Response) => {
+  confirmEmail = async (req: Request, res: Response) => {
     try {
       const data = await UserService.confirmemail(req.body);
       if (data.status === 'success') {
@@ -61,6 +61,54 @@ class UserController {
       return res.status(406).json({ message: message.user.confirmFailed, ...data });
     } catch (err) {
       return res.status(500).json({ message: message.user.confirmFailed, data: err });
+    }
+  };
+
+  askPermission = async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.askPermission(req.body.type, res.locals.user);
+      if (data.status === 'success') {
+        return res.status(200).json(data);
+      }
+      return res.status(406).json({ message: message.user.askFailed, ...data });
+    } catch (err) {
+      return res.status(500).json({ message: message.user.askFailed, data: err });
+    }
+  };
+
+  getProfile = async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.getProfile(res.locals.user);
+      if (data.status === 'success') {
+        return res.status(200).json(data);
+      }
+      return res.status(406).json({ message: message.user.errorOnListUsers, ...data });
+    } catch (err) {
+      return res.status(500).json({ message: message.user.errorOnListUsers, data: err });
+    }
+  };
+
+  listAskPermission = async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.listAskPermission();
+      if (data.status === 'success') {
+        return res.status(200).json(data);
+      }
+      return res.status(406).json({ message: message.user.errorOnListAsk, ...data });
+    } catch (err) {
+      return res.status(500).json({ message: message.user.errorOnListAsk, data: err });
+    }
+  };
+
+  listAllUsers = async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.listAllUsers();
+      if (data.status === 'success') {
+        return res.status(200).json(data);
+      }
+      return res.status(406).json({ message: message.user.errorOnListUsers, ...data });
+    } catch (err) {
+      return res.status(500).json({ message: message.user.errorOnListUsers, data: err });
     }
   };
 }

@@ -58,6 +58,11 @@ const UserSchema = {
     type: String,
     trim: true,
   },
+  askPermission: {
+    type: String,
+    trim: true,
+    default: 'default',
+  },
 };
 
 const schema = new Schema(UserSchema);

@@ -1,19 +1,21 @@
 import express from 'express';
 
-const { authorize } = require('@helpers/authentication');
+const { authorize, authorizeAdmin } = require('@helpers/authentication');
 
 const UserController = require('@controllers/UserController');
 
 const routes = express.Router();
 
-routes.post('/singin', UserController.singin);
-routes.post('/singup', UserController.singup);
-routes.post('/forgetpassword', UserController.forgetpassword);
-routes.post('/resetpassword', UserController.resetpassword);
-routes.post('/confirmemail', UserController.confirmemail);
+routes.post('/singin', UserController.singIn);
+routes.post('/singup', UserController.singUp);
+routes.post('/forgetpassword', UserController.forgetPassword);
+routes.post('/resetpassword', UserController.resetPassword);
+routes.post('/confirmemail', UserController.confirmEmail);
 
-routes.get('/test', authorize, (req, res, next) => {
-  res.status(200).json({ message: 'autorizado' });
-});
+routes.post('/askpermission', authorize, UserController.askPermission);
+routes.get('/getProfile', authorize, UserController.getProfile);
+
+routes.get('/list/users', authorizeAdmin, UserController.listAllUsers);
+routes.get('/list/askpermission', authorizeAdmin, UserController.listAskPermission);
 
 module.exports = routes;
