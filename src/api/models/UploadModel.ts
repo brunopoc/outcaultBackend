@@ -13,6 +13,11 @@ const schema = new Schema({
     trim: true,
     default: 'notinformed',
   },
+  ref: {
+    type: String,
+    trim: true,
+    default: 'undefined',
+  },
 });
 
 schema.set('toJSON', { getters: true, virtuals: true });

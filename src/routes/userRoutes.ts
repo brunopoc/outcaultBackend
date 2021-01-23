@@ -14,6 +14,7 @@ routes.post('/confirmemail', UserController.confirmEmail);
 
 routes.post('/askpermission', authorize, UserController.askPermission);
 routes.get('/getProfile', authorize, UserController.getProfile);
+routes.post('/updateProfile', authorize, UserController.updateProfile);
 
 routes.get('/list/users', authorizeAdmin, UserController.listAllUsers);
 routes.get('/list/askpermission', authorizeAdmin, UserController.listAskPermission);

@@ -76,6 +76,18 @@ class UserController {
     }
   };
 
+  updateProfile = async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.updateProfile(req.body, res.locals.user);
+      if (data.status === 'success') {
+        return res.status(200).json(data);
+      }
+      return res.status(406).json({ message: message.user.errorOnUpdateProfile, ...data });
+    } catch (err) {
+      return res.status(500).json({ message: message.user.errorOnUpdateProfile, data: err });
+    }
+  };
+
   getProfile = async (req: Request, res: Response) => {
     try {
       const data = await UserService.getProfile(res.locals.user);

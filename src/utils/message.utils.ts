@@ -4,6 +4,7 @@ const messages = {
   errorOnListAsk: 'Não foi possível carregar a lista de permissões',
   errorOnListUsers: 'Não foi possível carregar a lista de usuários',
   errorOnGetProfile: 'Não foi possível carregar seu perfil',
+  errorOnUpdateProfile: 'Não foi possível atualizar seu perfil',
   user: {
     notCreated: 'Não foi possível fazer o cadastro do novo usuario',
     notLogged: 'Não foi possível logar o usuario',

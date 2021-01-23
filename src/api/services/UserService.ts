@@ -193,6 +193,24 @@ class UserService {
     }
   };
 
+  updateProfile = async ({
+    name, email, nickname, avatar,
+  }, { id }) => {
+    try {
+      const data: any = await mongoose.model('User').findByIdAndUpdate(id, {
+        $set: {
+          name, email, nickname, avatar,
+        },
+      });
+
+      if (!data) return { status: 'errorOnUpdateProfile' };
+
+      return { status: 'success' };
+    } catch (err) {
+      return { status: 'errorOnUpdateProfile', data: err };
+    }
+  };
+
   getProfile = async ({ id }) => {
     try {
       const data: any = await mongoose.model('User').findOne({
