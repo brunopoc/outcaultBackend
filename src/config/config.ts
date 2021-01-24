@@ -14,4 +14,9 @@ module.exports = {
     storageType: process.env.STORAGE_TYPE,
     bucket: { name: process.env.BUCKET_NAME },
   },
+  pagination: {
+    image: {
+      resPerPage: process.env.IMAGE_RES_PER_PAGE,
+    },
+  },
 };

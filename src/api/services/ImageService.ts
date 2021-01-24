@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+const config = require('../../config/config');
+
 class ImageService {
   post = async (file, user) => {
     const Image = mongoose.model('Image');
@@ -16,9 +18,15 @@ class ImageService {
     return uploadResponse;
   };
 
-  list = async () => {
+  list = async (page) => {
     try {
-      const data: any = await mongoose.model('Image').find();
+      const Image = mongoose.model('Image');
+      const resPerPage = parseInt(config.pagination.image.resPerPage, 10);
+      const currentPage = parseInt(page, 10) || 1;
+      const data: any = await Image.find()
+        .skip(resPerPage * currentPage - resPerPage)
+        .limit(resPerPage)
+        .sort({ createdAt: -1 });
 
       if (!data) return { status: 'errorOnListImages' };
 

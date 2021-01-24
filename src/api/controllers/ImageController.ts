@@ -18,7 +18,7 @@ class ImageController {
 
   list = async (req: Request, res: Response) => {
     try {
-      const data = await ImageService.list();
+      const data = await ImageService.list(req.query.page);
       if (data.status === 'success') {
         return res.status(200).json(data);
       }
