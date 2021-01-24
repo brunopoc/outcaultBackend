@@ -18,8 +18,12 @@ const schema = new Schema({
     trim: true,
     default: 'undefined',
   },
+  key: {
+    type: String,
+    required: true,
+  },
 });
 
 schema.set('toJSON', { getters: true, virtuals: true });
 
-module.exports = mongoose.model('Upload', schema);
+module.exports = mongoose.model('Image', schema);

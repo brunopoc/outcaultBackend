@@ -17,7 +17,7 @@ const storageTypes = {
         if (err) cb(err, file.originalname);
 
         // eslint-disable-next-line no-param-reassign
-        file.key = `${hash.toString('hex')}-${file.originalname}`;
+        file.key = `${hash.toString('hex')}-${file.originalname.replace(/\s/g, '')}`;
 
         cb(null, file.key);
       });
@@ -35,7 +35,7 @@ const storageTypes = {
         const fileName = `${hash.toString('hex')}-${file.originalname.replace(
           /\.[^/.]+$/,
           '.jpeg',
-        )}`;
+        ).replace(/\s/g, '')}`;
 
         cb(null, fileName);
       });
