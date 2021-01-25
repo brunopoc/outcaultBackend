@@ -15,6 +15,9 @@ module.exports = {
     bucket: { name: process.env.BUCKET_NAME },
   },
   pagination: {
+    default: {
+      resPerPage: process.env.DEFAULT_RES_PER_PAGE,
+    },
     image: {
       resPerPage: process.env.IMAGE_RES_PER_PAGE,
     },

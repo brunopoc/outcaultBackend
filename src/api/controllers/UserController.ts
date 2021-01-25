@@ -10,9 +10,13 @@ class UserController {
       if (data.status === 'created') {
         return res.status(200).json(data);
       }
-      return res.status(400).json({ message: message.user.notCreated, ...data });
+      return res
+        .status(400)
+        .json({ message: message.user.notCreated, ...data });
     } catch (err) {
-      return res.status(500).json({ message: message.user.notCreated, data: err });
+      return res
+        .status(500)
+        .json({ message: message.user.notCreated, data: err });
     }
   };
 
@@ -24,7 +28,9 @@ class UserController {
       }
       return res.status(404).json({ message: message.user.notLogged, ...data });
     } catch (err) {
-      return res.status(500).json({ message: message.user.notLogged, data: err });
+      return res
+        .status(500)
+        .json({ message: message.user.notLogged, data: err });
     }
   };
 
@@ -34,9 +40,13 @@ class UserController {
       if (data.status === 'success') {
         return res.status(200).json(data);
       }
-      return res.status(400).json({ message: message.user.forgetFailed, ...data });
+      return res
+        .status(400)
+        .json({ message: message.user.forgetFailed, ...data });
     } catch (err) {
-      return res.status(500).json({ message: message.user.forgetFailed, data: err });
+      return res
+        .status(500)
+        .json({ message: message.user.forgetFailed, data: err });
     }
   };
 
@@ -46,9 +56,13 @@ class UserController {
       if (data.status === 'success') {
         return res.status(200).json(data);
       }
-      return res.status(406).json({ message: message.user.resetFailed, ...data });
+      return res
+        .status(406)
+        .json({ message: message.user.resetFailed, ...data });
     } catch (err) {
-      return res.status(500).json({ message: message.user.resetFailed, data: err });
+      return res
+        .status(500)
+        .json({ message: message.user.resetFailed, data: err });
     }
   };
 
@@ -58,21 +72,30 @@ class UserController {
       if (data.status === 'success') {
         return res.status(200).json(data);
       }
-      return res.status(406).json({ message: message.user.confirmFailed, ...data });
+      return res
+        .status(406)
+        .json({ message: message.user.confirmFailed, ...data });
     } catch (err) {
-      return res.status(500).json({ message: message.user.confirmFailed, data: err });
+      return res
+        .status(500)
+        .json({ message: message.user.confirmFailed, data: err });
     }
   };
 
   askPermission = async (req: Request, res: Response) => {
     try {
-      const data = await UserService.askPermission(req.body.type, res.locals.user);
+      const data = await UserService.askPermission(
+        req.body.type,
+        res.locals.user,
+      );
       if (data.status === 'success') {
         return res.status(200).json(data);
       }
       return res.status(406).json({ message: message.user.askFailed, ...data });
     } catch (err) {
-      return res.status(500).json({ message: message.user.askFailed, data: err });
+      return res
+        .status(500)
+        .json({ message: message.user.askFailed, data: err });
     }
   };
 
@@ -82,9 +105,13 @@ class UserController {
       if (data.status === 'success') {
         return res.status(200).json(data);
       }
-      return res.status(406).json({ message: message.user.errorOnUpdateProfile, ...data });
+      return res
+        .status(406)
+        .json({ message: message.user.errorOnUpdateProfile, ...data });
     } catch (err) {
-      return res.status(500).json({ message: message.user.errorOnUpdateProfile, data: err });
+      return res
+        .status(500)
+        .json({ message: message.user.errorOnUpdateProfile, data: err });
     }
   };
 
@@ -94,9 +121,13 @@ class UserController {
       if (data.status === 'success') {
         return res.status(200).json(data);
       }
-      return res.status(406).json({ message: message.user.errorOnListUsers, ...data });
+      return res
+        .status(406)
+        .json({ message: message.user.errorOnListUsers, ...data });
     } catch (err) {
-      return res.status(500).json({ message: message.user.errorOnListUsers, data: err });
+      return res
+        .status(500)
+        .json({ message: message.user.errorOnListUsers, data: err });
     }
   };
 
@@ -106,9 +137,13 @@ class UserController {
       if (data.status === 'success') {
         return res.status(200).json(data);
       }
-      return res.status(406).json({ message: message.user.errorOnListAsk, ...data });
+      return res
+        .status(406)
+        .json({ message: message.user.errorOnListAsk, ...data });
     } catch (err) {
-      return res.status(500).json({ message: message.user.errorOnListAsk, data: err });
+      return res
+        .status(500)
+        .json({ message: message.user.errorOnListAsk, data: err });
     }
   };
 
@@ -118,9 +153,13 @@ class UserController {
       if (data.status === 'success') {
         return res.status(200).json(data);
       }
-      return res.status(406).json({ message: message.user.errorOnListUsers, ...data });
+      return res
+        .status(406)
+        .json({ message: message.user.errorOnListUsers, ...data });
     } catch (err) {
-      return res.status(500).json({ message: message.user.errorOnListUsers, data: err });
+      return res
+        .status(500)
+        .json({ message: message.user.errorOnListUsers, data: err });
     }
   };
 }

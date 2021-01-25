@@ -7,6 +7,9 @@ const messages = {
   errorOnUpdateProfile: 'Não foi possível atualizar seu perfil',
   errorOnListImages: 'Não foi possível carregar a lista de imagens',
   deleteFailed: 'Não foi possível realizar a deleção',
+  errorOnLoadComic: 'Não foi possível carregar a webtoon',
+  errorOnSaveComic: 'Não foi possível salvar a webtoon',
+  errorOnListComics: 'Não foi possível carrecar as webtoons',
   user: {
     notCreated: 'Não foi possível fazer o cadastro do novo usuario',
     notLogged: 'Não foi possível logar o usuario',
