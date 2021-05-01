@@ -82,6 +82,25 @@ class UserController {
     }
   };
 
+  alreadyInBase = async (req: Request, res: Response) => {
+    try {
+      const data = await UserService.alreadyInBase(req.body);
+      if (data.status === 'in') {
+        return res.status(200).json({ message: message.user.emailAlreadyInBase });
+      }
+      if (data.status === 'notIn') {
+        return res.status(200).json({ message: message.user.emailNotInBase });
+      }
+      return res
+        .status(406)
+        .json({ message: message.user.emailSearchFailed });
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ message: message.user.emailSearchFailed, data: err });
+    }
+  };
+
   askPermission = async (req: Request, res: Response) => {
     try {
       const data = await UserService.askPermission(

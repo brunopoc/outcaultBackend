@@ -98,6 +98,24 @@ class UserService {
     return userResponse;
   }
 
+  alreadyInBase = async ({ email }: UserData) => {
+    const userResponse = await mongoose.model('User').findOne({
+      email,
+    })
+      .then(async ({
+        _id: id,
+      }: any) => {
+        if (!id) {
+          return { status: 'notIn', data: Error('email not found') };
+        }
+        return {
+          status: 'in',
+        };
+      })
+      .catch((e: any) => ({ status: 'notfound', data: e }));
+    return userResponse;
+  }
+
   forgetpassword = async ({ email }) => {
     const User = mongoose.model('User');
     User.findOne({

@@ -16,6 +16,9 @@ const messages = {
     forgetFailed: 'Não foi possível recuperar esse usuario, verifique se o email está correto.',
     resetFailed: 'Não foi possível resetar a senha desse usuario, verifique se os dados passados estão corretos.',
     confirmFailed: 'Não foi possível confirmar o usuario, verifique se o token é valido.',
+    emailAlreadyInBase: 'Email cadastrado, por favor, faça o login',
+    emailNotInBase: 'Email não está cadastro, por favor, faça seu cadastro',
+    emailSearchFailed: 'Ocorreu um erro na busca do email',
   },
   image: {
     uploadFailed: 'Ocorreu um erro na hora de fazer o seu upload, tenta novamente mais tarde',
