@@ -4,13 +4,33 @@ Projeto em JS
 
 ## Installation
 
-Para fazer o uso do projeto rode o comando:
+1) Configurar as seguintes variaveis de ambiente para o projeto:
+
+- Hash de caracteres usado pelo sistema de cadastrado da aplicação:
+  SALT_KEY 
+
+- Endereço do banco mongodb:
+ DB_CONNECT
+
+- Forma de storage da midia: 
+ STORAGE_TYPE=local
+
+- Numero de imagens por pagina:
+IMAGE_RES_PER_PAGE
+
+- Infos da AWS:
+BUCKET_NAME
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+AWS_DEFAULT_REGION
+
+2) Para fazer o uso do projeto rode o comando:
 
 ```bash
 yarn install
 ```
 
-Logo em seguida rode:
+3) Logo em seguida rode:
 
 ```bash
 yarn dev
