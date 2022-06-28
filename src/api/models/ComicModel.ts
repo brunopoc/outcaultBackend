@@ -7,6 +7,7 @@ const ComicSchema = {
     type: String,
     required: true,
     trim: true,
+    unique: true,
   },
   description: {
     type: String,
@@ -36,6 +37,15 @@ const ComicSchema = {
 };
 
 const schema = new Schema(ComicSchema);
+
+export interface IComic {
+  name: string,
+  description: string,
+  userId: string,
+  approved?: boolean,
+  store?: boolean,
+  avatar?: string,
+}
 
 export interface IComicDoc extends mongoose.Document {
     ComicSchema

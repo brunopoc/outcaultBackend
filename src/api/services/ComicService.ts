@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
 
-const config = require('../../config/config');
+import { IChapter } from '@models/ChapterModel';
+import { IComic } from '@models/ComicModel';
+
+const config = require('@config/config');
 
 class ComicService {
   getComic = async (id) => {
@@ -27,44 +30,50 @@ class ComicService {
     }
   };
 
-  postComic = async (name, description, avatar, chapter, user) => {
+  postComic = async (name: string, description: string, avatar: string, userId: string) => {
     const Comic = mongoose.model('Comic');
-    const Chapter = mongoose.model('Chapter');
 
-    if (!chapter && chapter.length <= 0) {
-      return { status: 'error', data: 'Capitulo vazio' };
-    }
+    console.log(name);
 
-    const ComicModel = new Comic({
+    const data: IComic = {
       name,
       description,
       avatar,
-      userId: user.id,
-    });
+      userId,
+    };
+
+    const ComicModel = new Comic(data);
 
     const dataComic = await ComicModel.save()
       .then((result) => ({
         status: 'success',
         data: result,
       }))
-      .catch((e) => ({ status: 'errorOnSaveComic', data: e }));
+      .catch((e: Error) => ({ status: 'errorOnSaveComic', data: e }));
 
-    const ChapterModel = new Chapter({
-      name: chapter.name,
-      pages: chapter.pages,
-      order: chapter.order,
-      userId: user.id,
-      comicId: dataComic.data.id,
-    });
+    return { ...dataComic };
+  };
+
+  postChapter = async (title: string, number: number, comicId: string, userId: string) => {
+    const Chapter = mongoose.model('Chapter');
+
+    const data: IChapter = {
+      title,
+      number,
+      userId,
+      comicId,
+    };
+
+    const ChapterModel = new Chapter(data);
 
     const dataChapter = await ChapterModel.save()
       .then((result) => ({
         status: 'success',
         data: result,
       }))
-      .catch((e) => ({ status: 'errorOnSaveChapter', data: e }));
+      .catch((e: Error) => ({ status: 'errorOnSaveChapter', data: e }));
 
-    return { comic: dataComic, chapter: dataChapter };
+    return { chapter: dataChapter };
   };
 
   listAllComics = async (page) => {
@@ -80,8 +89,8 @@ class ComicService {
       if (!data) return { status: 'errorOnListComics' };
 
       return { status: 'success', data };
-    } catch (err) {
-      return { status: 'errorOnListComics', data: err };
+    } catch (e) {
+      return { status: 'errorOnListComics', data: e };
     }
   };
 }

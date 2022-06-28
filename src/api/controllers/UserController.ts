@@ -8,7 +8,7 @@ class UserController {
     try {
       const data = await UserService.singup(req.body);
       if (data.status === 'created') {
-        return res.status(200).json(data);
+        return res.status(201).json(data);
       }
       return res
         .status(400)

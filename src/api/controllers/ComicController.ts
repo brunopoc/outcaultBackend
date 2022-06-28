@@ -23,15 +23,16 @@ class ComicController {
   postComic = async (req: Request, res: Response) => {
     try {
       const {
-        name, description, avatar, chapter,
+        name, description, avatar
       } = req.body;
+      
       const data = await ComicService.postComic(
         name,
         description,
         avatar,
-        chapter,
-        res.locals.user,
+        res.locals.user.id,
       );
+
       if (data.status === 'success') {
         return res.status(200).json(data);
       }

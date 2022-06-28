@@ -3,12 +3,12 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const ChapterSchema = {
-  name: {
+  title: {
     type: String,
     required: true,
     trim: true,
   },
-  order: {
+  number: {
     type: Number,
     unique: true,
     required: true,
@@ -27,25 +27,16 @@ const ChapterSchema = {
     type: Date,
     default: Date.now,
   },
-  pages: [{
-    url: {
-      type: String,
-      trim: true,
-      required: true,
-    },
-    text: {
-      type: String,
-      trim: true,
-    },
-    order: {
-      type: Number,
-      unique: true,
-      required: true,
-    },
-  }],
 };
 
 const schema = new Schema(ChapterSchema);
+
+export interface IChapter {
+  title: string,
+  number: number,
+  userId: string,
+  comicId: string,
+}
 
 export interface IChapterDoc extends mongoose.Document {
     ChapterSchema

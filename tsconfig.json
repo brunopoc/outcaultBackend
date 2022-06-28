@@ -27,6 +27,7 @@
       "@utils/*": ["./src/utils/*"],
       "@jobs/*": ["./src/jobs/*"],
       "@helpers/*": ["./src/helpers/*"],
+      "@config/*": ["./src/config/*"],
       "@types/*": ["./src/@types/*"]
     }  
   },

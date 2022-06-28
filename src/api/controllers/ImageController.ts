@@ -38,7 +38,7 @@ class ImageController {
     } catch (err) {
       return res.status(500).json({ message: message.user.deleteFailed, data: err });
     }
-  };
+  ComicController};
 }
 
 module.exports = new ImageController();
