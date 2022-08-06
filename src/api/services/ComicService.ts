@@ -8,27 +8,17 @@ const config = require('@config/config');
 class ComicService {
   getComic = async (id) => {
     try {
+      const Chapter = mongoose.model('Chapter');
+      const dataChapter = await Chapter.find({
+        comicId: id,
+      }, {
+        title: 1, chapterNumber: 1, comicId: 1,
+      });
+
       const Comic = mongoose.model('Comic');
       const dataComic: any = await Comic.findOne({
         _id: id,
       });
-
-      const Chapter = mongoose.model('Chapter');
-      const dataChapter = await Chapter.find({
-        comicId: id,
-      });
-
-      if (dataChapter) {
-        dataChapter.map(async (chapter) => {
-          const Image = mongoose.model('Image');
-          const dataImage: any = await Image.find({
-            // eslint-disable-next-line no-underscore-dangle
-            chapterId: chapter._id,
-          });
-
-          return { ...chapter, pages: dataImage };
-        });
-      }
 
       if (!dataComic) return { status: 'errorOnLoadComic' };
 
@@ -63,6 +53,50 @@ class ComicService {
     return { ...dataComic };
   };
 
+  listAllComics = async (page) => {
+    try {
+      const Comic = mongoose.model('Comic');
+      const resPerPage = parseInt(config.default.image.resPerPage, 10);
+      const currentPage = parseInt(page, 10) || 1;
+      const data: any = await Comic.find()
+        .skip(resPerPage * currentPage - resPerPage)
+        .limit(resPerPage)
+        .sort({ createdAt: -1 });
+
+      if (!data) return { status: 'errorOnListComics' };
+
+      return { status: 'success', data };
+    } catch (e) {
+      return { status: 'errorOnListComics', data: e };
+    }
+  };
+
+  getChapter = async (id) => {
+    try {
+      const Chapter = mongoose.model('Chapter');
+      const dataChapter = await Chapter.findOne({
+        _id: id,
+      }, {
+        title: 1, chapterNumber: 1, comicId: 1, createdAt: 1,
+      });
+
+      if (!dataChapter) return { status: 'errorOnLoadComic' };
+
+      const Pages = mongoose.model('Pages');
+      const dataImage: any = await Pages.find({
+        // eslint-disable-next-line no-underscore-dangle
+        chapterId: dataChapter._id,
+      }, { url: 1, pageNumber: 1, _id: 0 });
+
+      return {
+        status: 'success',
+        data: { chapter: dataChapter, pages: dataImage },
+      };
+    } catch (err) {
+      return { status: 'errorOnLoadComic', data: err };
+    }
+  };
+
   postChapter = async (title: string, chapterNumber: number, comicId: string, userId: string) => {
     const Comic = mongoose.model('Comic');
 
@@ -91,24 +125,6 @@ class ComicService {
       .catch((e: Error) => ({ status: 'errorOnSaveChapter', data: e }));
 
     return { dataChapter };
-  };
-
-  listAllComics = async (page) => {
-    try {
-      const Comic = mongoose.model('Comic');
-      const resPerPage = parseInt(config.default.image.resPerPage, 10);
-      const currentPage = parseInt(page, 10) || 1;
-      const data: any = await Comic.find()
-        .skip(resPerPage * currentPage - resPerPage)
-        .limit(resPerPage)
-        .sort({ createdAt: -1 });
-
-      if (!data) return { status: 'errorOnListComics' };
-
-      return { status: 'success', data };
-    } catch (e) {
-      return { status: 'errorOnListComics', data: e };
-    }
   };
 }
 
