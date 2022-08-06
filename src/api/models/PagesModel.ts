@@ -2,40 +2,41 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-const ImageSchema = {
+const PageSchema = {
   url: {
     type: String,
     required: true,
     trim: true,
-    unique: true,
   },
   user: {
     type: String,
     trim: true,
-    default: 'notinformed',
-  },
-  ref: {
-    type: String,
-    trim: true,
-    default: 'undefined',
+    required: true,
   },
   key: {
     type: String,
     required: true,
-    unique: true,
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
+  chapterId: {
+    type: String,
+    required: true,
+  },
+  pageNumber: {
+    type: Number,
+    required: true,
+  },
 };
 
-const schema = new Schema(ImageSchema);
+const schema = new Schema(PageSchema);
 
-export interface IImageDoc extends mongoose.Document {
-  ImageSchema
+export interface IPageDoc extends mongoose.Document {
+  PageSchema
 }
 
 schema.set('toJSON', { getters: true, virtuals: true });
 
-module.exports = mongoose.model<IImageDoc>('Image', schema);
+module.exports = mongoose.model<IPageDoc>('Pages', schema);

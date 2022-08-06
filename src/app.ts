@@ -1,6 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable class-methods-use-this */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable import/no-dynamic-require, global-require */
+
 import express, {
-  Response, Request, NextFunction,
+  Express, Response, Request,
 } from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -16,12 +21,12 @@ const config = require('./config/config');
 const indexRoutes = require('./routes/indexRoutes');
 
 interface IAppController {
-  express: any;
-  middlewares: any;
-  routes: any;
-  errorManagement: any;
-  dbConnect: any;
-  loadModels: any;
+  express: Express;
+  middlewares: () => void;
+  routes: () => void;
+  errorManagement: () => void;
+  dbConnect: () => void;
+  loadModels: () => void;
 }
 
 class AppController implements IAppController {
@@ -33,7 +38,7 @@ class AppController implements IAppController {
     this.errorManagement();
   }
 
-  express = express();
+  express: Express = express();
 
   middlewares() {
     const corsOption = {
@@ -54,26 +59,25 @@ class AppController implements IAppController {
   }
 
   errorManagement() {
-    // eslint-disable-next-line no-unused-vars, consistent-return
-    this.express.use((err, req: Request, res: Response, next: NextFunction) => {
+    this.express.use((err, req: Request, res: Response) => {
       if (err instanceof SyntaxError) {
         return res.status(400).send(JSON.stringify({
           error: 'Invalid JSON',
         }));
       }
-      res.status(500).json({ message: 'Um erro desconhecido ocorreu', data: err });
+      return res.status(500).json({ message: 'Um erro desconhecido ocorreu', data: err });
     });
   }
 
   dbConnect() {
-    mongoose.connect(config.connectionString, { useNewUrlParser: true });
+    mongoose.connect(config.connectionString, { useNewUrlParser: true })
+      .catch((e) => console.log(e));
   }
 
   loadModels() {
     const modelsPath = path.resolve(__dirname, 'api', 'models');
     fs.readdirSync(modelsPath).forEach((file) => {
       const filePath = path.resolve(modelsPath, file);
-      // eslint-disable-next-line import/no-dynamic-require, global-require
       require(filePath);
     });
   }

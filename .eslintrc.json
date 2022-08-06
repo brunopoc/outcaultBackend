@@ -20,7 +20,13 @@
         "import"
     ],
     "rules": {
-        "linebreak-style": 0
+        "linebreak-style": 0,
+        "import/extensions": 0,
+        "no-console": 0,
+        "@typescript-eslint/no-var-requires": 0,
+        "@typescript-eslint/no-unsafe-assignment": 0,
+        "@typescript-eslint/no-unsafe-member-access": 0,
+        "@typescript-eslint/no-unsafe-call": 0
     },
     "settings": {
         "import/resolver": {

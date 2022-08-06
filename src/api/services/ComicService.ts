@@ -14,12 +14,23 @@ class ComicService {
       });
 
       const Chapter = mongoose.model('Chapter');
-      const dataChapter: any = await Chapter.find({
+      const dataChapter = await Chapter.find({
         comicId: id,
       });
 
+      if (dataChapter) {
+        dataChapter.map(async (chapter) => {
+          const Image = mongoose.model('Image');
+          const dataImage: any = await Image.find({
+            // eslint-disable-next-line no-underscore-dangle
+            chapterId: chapter._id,
+          });
+
+          return { ...chapter, pages: dataImage };
+        });
+      }
+
       if (!dataComic) return { status: 'errorOnLoadComic' };
-      if (!dataChapter) return { status: 'errorOnLoadChapter' };
 
       return {
         status: 'success',
@@ -32,8 +43,6 @@ class ComicService {
 
   postComic = async (name: string, description: string, avatar: string, userId: string) => {
     const Comic = mongoose.model('Comic');
-
-    console.log(name);
 
     const data: IComic = {
       name,
@@ -54,12 +63,20 @@ class ComicService {
     return { ...dataComic };
   };
 
-  postChapter = async (title: string, number: number, comicId: string, userId: string) => {
+  postChapter = async (title: string, chapterNumber: number, comicId: string, userId: string) => {
+    const Comic = mongoose.model('Comic');
+
+    const dataComic: any = await Comic.findOne({
+      _id: comicId,
+    });
+
+    if (!dataComic) return { status: 'errorOnLoadComic' };
+
     const Chapter = mongoose.model('Chapter');
 
     const data: IChapter = {
       title,
-      number,
+      chapterNumber,
       userId,
       comicId,
     };
@@ -73,7 +90,7 @@ class ComicService {
       }))
       .catch((e: Error) => ({ status: 'errorOnSaveChapter', data: e }));
 
-    return { chapter: dataChapter };
+    return { dataChapter };
   };
 
   listAllComics = async (page) => {

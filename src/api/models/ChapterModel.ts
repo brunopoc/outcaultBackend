@@ -8,7 +8,7 @@ const ChapterSchema = {
     required: true,
     trim: true,
   },
-  number: {
+  chapterNumber: {
     type: Number,
     unique: true,
     required: true,
@@ -33,7 +33,7 @@ const schema = new Schema(ChapterSchema);
 
 export interface IChapter {
   title: string,
-  number: number,
+  chapterNumber: number,
   userId: string,
   comicId: string,
 }

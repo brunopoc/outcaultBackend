@@ -16,6 +16,22 @@ class ImageController {
     }
   };
 
+  postPage = async (req: Request, res: Response) => {
+    try {
+      const { pageNumber, chapterId } = req.body;
+
+      const data = await ImageService.postPage(
+        req.file, res.locals.user, { pageNumber, chapterId },
+      );
+      if (data.status === 'success') {
+        return res.status(200).json(data);
+      }
+      return res.status(400).send({ message: message.image.uploadFailed, ...data });
+    } catch (e) {
+      return res.status(500).send({ message: message.image.uploadFailed, data: e });
+    }
+  };
+
   list = async (req: Request, res: Response) => {
     try {
       const data = await ImageService.list(req.query.page);
@@ -38,7 +54,7 @@ class ImageController {
     } catch (err) {
       return res.status(500).json({ message: message.user.deleteFailed, data: err });
     }
-  ComicController};
+  };
 }
 
 module.exports = new ImageController();

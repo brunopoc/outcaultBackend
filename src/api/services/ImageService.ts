@@ -18,6 +18,23 @@ class ImageService {
     return uploadResponse;
   };
 
+  postPage = async (file, user, { pageNumber, chapterId }) => {
+    const Pages = mongoose.model('Pages');
+    const name = file.filename || file.name;
+    const { location: url = `http://localhost:4000/files/${name}` } = file;
+
+    const uploadFile = new Pages({
+      url, user: user.email, key: file.key, chapterId, pageNumber,
+    });
+    const uploadResponse = await uploadFile
+      .save()
+      .then((data) => ({
+        status: 'success', uploaded: true, url, data,
+      }))
+      .catch((e) => ({ status: 'error', data: e }));
+    return uploadResponse;
+  };
+
   list = async (page) => {
     try {
       const Image = mongoose.model('Image');

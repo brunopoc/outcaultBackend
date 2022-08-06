@@ -23,13 +23,39 @@ class ComicController {
   postComic = async (req: Request, res: Response) => {
     try {
       const {
-        name, description, avatar
+        name, description, avatar,
       } = req.body;
-      
+
       const data = await ComicService.postComic(
         name,
         description,
         avatar,
+        res.locals.user.id,
+      );
+
+      if (data.status === 'success') {
+        return res.status(200).json(data);
+      }
+      return res
+        .status(406)
+        .json({ message: message.errorOnSaveComic, ...data });
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ message: message.errorOnSaveComic, data: err });
+    }
+  };
+
+  postChapter = async (req: Request, res: Response) => {
+    try {
+      const {
+        title, chapterNumber, comicId,
+      } = req.body;
+
+      const data = await ComicService.postChapter(
+        title,
+        chapterNumber,
+        comicId,
         res.locals.user.id,
       );
 
