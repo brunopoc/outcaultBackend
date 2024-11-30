@@ -23,7 +23,9 @@ class UserController {
   singIn = async (req: Request, res: Response) => {
     try {
       const data = await UserService.singin(req.body);
-      if (data.status === 'find') {
+      if (data.status === 'found') {
+        delete data.status
+        
         return res.status(200).json(data);
       }
       return res.status(404).json({ message: message.user.notLogged, ...data });

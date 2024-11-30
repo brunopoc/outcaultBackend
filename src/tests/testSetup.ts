@@ -36,7 +36,7 @@ module.exports = {
     // Connect to Mongoose
     beforeAll(async () => {
       const url = `mongodb://localhost:27017/${databaseName}`;
-      await mongoose.connect(url, { useNewUrlParser: true });
+      await mongoose.connect(url);
     });
 
     // Cleans up database between each test
